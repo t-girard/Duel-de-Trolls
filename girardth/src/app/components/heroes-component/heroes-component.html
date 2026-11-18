@@ -1,0 +1,28 @@
+<div><b>Détails de {{ heroNameModelCapitalized() }}</b></div>
+<div>id: {{ heroModel().id }}</div>
+<div>name: {{ heroModel().name }}</div>
+<div>actif: {{ heroModel().actif ? "&check;" : "&#10007;" }}</div>
+<div>Input avec signal + événement
+  <input [value]="heroModel().name"
+         (input)="changerHeroName($any($event.target).value)">
+  <button (click)="changerHeroActif()">Changer le actif</button>
+</div>
+<div>Input avec form
+  <input type="text" [formField]="heroForm.name" />
+  <input type="checkbox" [formField]="heroForm.actif" />
+</div>
+<h2>Étape 2 : liste de héros</h2>
+
+<ul class="heroes">
+  @for (hero of heroesModel(); track hero.id) {
+    <li>
+      <button type="button" routerLink="/detail/{{hero.id}}" class="button-31">
+        <span>{{hero.id}}</span>&nbsp;
+        <span>{{hero.name}}</span>&nbsp;
+        <span>{{ hero.actif ? "&check;" : "&#10007;" }}</span>
+      </button>
+    </li>
+  }
+</ul>
+
+<app-message-manager-component></app-message-manager-component>

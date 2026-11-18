@@ -1,0 +1,37 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">LES CHAMPIONS DE TA TRIBU</p>
+    <h1>Leaderboard</h1>
+    <p class="muted">Tes cinq trolls les plus expérimentés, classés par niveau.</p>
+  </div>
+  <span class="pill">{{ topTrolls().length }} / 5 champions</span>
+</section>
+
+<section class="panel leaderboard-panel">
+  <div class="section-heading">
+    <div><p class="eyebrow">CLASSEMENT PERSONNEL</p><h2>Meilleurs combattants</h2></div>
+    <span class="leaderboard-column-label">NIVEAU</span>
+  </div>
+  @if (topTrolls().length) {
+    <div class="leaderboard-list">
+      @for (troll of topTrolls(); track troll.id; let rank = $index) {
+        <a class="leaderboard-entry" [routerLink]="['/personnage', troll.id]">
+          <span class="leaderboard-rank" [class.top-rank]="rank < 3">{{ rank + 1 }}</span>
+          <span class="leaderboard-avatar">{{ troll.name.trim().charAt(0).toUpperCase() }}</span>
+          <span class="leaderboard-character">
+            <span class="leaderboard-name">{{ troll.name }} @if (troll.active) { <span class="active-tag">ACTIF</span> }</span>
+            <span class="leaderboard-meta">{{ troll.className }} · {{ troll.xp }} XP · {{ troll.gold }} or</span>
+          </span>
+          <span class="leaderboard-level">Niv. {{ troll.level }}<span aria-hidden="true">→</span></span>
+        </a>
+      }
+    </div>
+  } @else {
+    <div class="leaderboard-empty">
+      <span class="troll-avatar">?</span>
+      <h3>Aucun troll dans le classement</h3>
+      <p>Crée ton premier personnage pour apparaître ici.</p>
+      <a class="button button-primary" routerLink="/nouveau-troll">Créer un troll</a>
+    </div>
+  }
+</section>

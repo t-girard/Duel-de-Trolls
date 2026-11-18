@@ -1,0 +1,187 @@
+FONCTIONNALITÉS IMPLÉMENTÉES — DUEL DE TROLLS
+
+Ce document décrit les fonctionnalités de la première version du jeu et les
+fichiers du projet qui les implémentent.
+
+1. Navigation et écrans du jeu
+Description :
+La page « Mes trolls » affiche par défaut la liste et la création des trolls,
+même si un personnage est actif. Le bouton « Détails » ouvre l'inventaire du
+troll correspondant. Depuis la liste, le joueur peut rendre un troll actif ou
+demander sa suppression avec confirmation ; supprimer le personnage actif
+active le premier personnage restant. Le leaderboard classe les
+cinq trolls du joueur ayant le niveau le plus élevé ; chaque entrée ouvre la
+fiche détaillée du troll correspondant sans changer le personnage actif. Les
+routes historiques ou inconnues redirigent vers la liste des trolls.
+Fichiers concernés :
+- src/app/app.html
+- src/app/app.ts
+- src/app/app.routes.ts
+- src/app/app.config.ts
+- src/app/components/leaderboard/leaderboard.ts
+- src/app/components/leaderboard/leaderboard.html
+- src/app/components/hero-detail-component/hero-detail-component.ts
+- src/app/components/hero-detail-component/hero-detail-component.html
+- src/app/components/leaderboard/leaderboard.spec.ts
+- src/app/components/leaderboard/leaderboard.html
+- src/styles.css
+
+2. Création et gestion des trolls
+Description :
+Le joueur peut créer plusieurs trolls de classe Guerrier en leur donnant un
+nom et en répartissant exactement 40 points entre six caractéristiques. Chaque
+caractéristique doit avoir au moins 1 point. La répartition se fait avec des
+boutons + et -, et un bouton peut générer une répartition aléatoire valide. Le
+premier troll créé devient actif ; le joueur peut ensuite choisir lequel de ses
+trolls est actif.
+Fichiers concernés :
+- src/app/data/troll.ts
+- src/app/services/troll-service.ts
+- src/app/components/dashboard/dashboard.ts
+- src/app/components/dashboard/dashboard.html
+- src/styles.css
+
+3. Sauvegarde locale des personnages
+Description :
+La liste des trolls et leur progression sont sauvegardées dans le stockage
+local du navigateur, puis rechargées lors d'une prochaine visite.
+Fichiers concernés :
+- src/app/services/troll-service.ts
+
+4. Fiche du personnage et caractéristiques
+Description :
+La fiche affiche le troll actif, son niveau, son expérience, son or, ses
+caractéristiques et le plafond de points disponible, calculé selon le niveau.
+Le joueur peut librement ajouter et retirer des points tant qu'aucune
+caractéristique ne descend sous 1 et que le total investi ne dépasse pas 40,
+augmenté de 2 points par niveau gagné. Chaque niveau apporte automatiquement
+un point à toutes les caractéristiques hors Vie et 5 PV ; ces bonus ne sont pas
+retirables. Un point de compétence dépensé en Vie vaut 5 PV. La fiche présente
+les totaux avec des barres et chaque caractéristique dispose d'un
+bouton « Détail » qui explique les points de compétence, les bonus
+d'équipement et les éventuels bonus de niveau ; la caractéristique Vie affiche
+le total des PV, identique au maximum utilisé en combat.
+Fichiers concernés :
+- src/app/components/hero-detail-component/hero-detail-component.ts
+- src/app/components/hero-detail-component/hero-detail-component.html
+- src/app/components/hero-detail-component/hero-detail-component.css
+- src/app/services/troll-service.ts
+- src/app/data/troll.ts
+- src/styles.css
+
+5. Poings et armes du marché
+Description :
+Chaque troll commence avec ses poings, qui apportent +1 en attaque physique.
+Les anciennes armes de départ sélectionnables ont été supprimées ; les armes
+achetables au marché restent équipables et remplacent le bonus des poings.
+L'arme équipée est utilisée lors des combats.
+Fichiers concernés :
+- src/app/data/troll.ts
+- src/app/components/hero-detail-component/hero-detail-component.ts
+- src/app/components/hero-detail-component/hero-detail-component.html
+- src/app/services/troll-service.ts
+- src/app/components/arena/arena.ts
+
+6. Combats au tour par tour
+Description :
+L'arène choisit un adversaire aléatoire parmi les entrées de src/ennemis.csv.
+Ses attaques, défenses, esquive, vie et récompenses proviennent du fichier ;
+les attaques magiques utilisent la défense magique du troll. À chaque tour,
+le joueur peut attaquer, se défendre, fuir ou consommer une potion équipée.
+Les potions sont retirées de l'inventaire, leurs bonus durent jusqu'à la fin
+du combat et leur utilisation ne fait pas agir l'ennemi. Les attaques tiennent
+compte de l'esquive (plafonnée à 50 %), d'un facteur de dégâts aléatoire et
+d'une probabilité de coup critique de 10 %. Le journal et les barres de vie
+présentent les événements et les points de vie restants. La fin du combat
+affiche une illustration ainsi que les gains ou pertes d'expérience et d'or.
+Fichiers concernés :
+- src/ennemis.csv
+- angular.json
+- src/app/components/arena/arena.ts
+- src/app/components/arena/arena.html
+- src/app/data/troll.ts
+- src/app/services/troll-service.ts
+- src/app/app.routes.ts
+- src/styles.css
+
+7. Expérience, niveaux et récompenses de combat
+Description :
+Une victoire attribue l'expérience et l'or définis pour l'adversaire dans le
+CSV. Une défaite attribue une petite quantité d'expérience et retire une
+partie de l'or ; le récapitulatif illustré détaille les montants. Le seuil
+d'expérience augmente avec le niveau ; chaque niveau gagné accorde 2 points
+de compétence. Les gains de niveau sont possibles à l'issue d'une victoire
+comme d'une défaite.
+Fichiers concernés :
+- src/app/data/troll.ts
+- src/app/services/troll-service.ts
+- src/app/components/arena/arena.ts
+- src/app/components/arena/arena.html
+- src/app/components/hero-detail-component/hero-detail-component.html
+
+8. Présentation visuelle et adaptation mobile
+Description :
+Les écrans disposent d'une identité visuelle commune, d'une navigation
+cohérente et d'une mise en page adaptée aux petits écrans.
+Fichiers concernés :
+- src/styles.css
+- src/app/app.html
+- src/app/components/dashboard/dashboard.html
+- src/app/components/hero-detail-component/hero-detail-component.html
+- src/app/components/arena/arena.html
+
+9. Marché et inventaire du personnage
+Description :
+Chaque personnage possède son propre étal journalier, sa sélection
+d'équipements et ses améliorations, sauvegardés indépendamment. Les stocks
+sont renouvelés au prochain minuit local, même si le marché reste ouvert, et
+restent identiques pendant la journée. Chaque étal propose cinq équipements et
+consommables adaptés à la classe et au niveau du troll. Les prix des
+articles du catalogue sont multipliés par dix ; les achats vérifient le niveau
+requis et le portefeuille, puis sont sauvegardés avec le personnage. Une
+amélioration répétable, dont le prix augmente à chaque achat, ajoute un article
+dès le prochain renouvellement quotidien. La fiche du personnage sert aussi
+d'inventaire : elle affiche les objets possédés, les emplacements d'armes,
+d'armures et deux slots de consommables, et permet d'équiper ou de retirer un
+objet. Les bonus d'équipement sont pris en compte dans les caractéristiques et
+les combats. Les consommables peuvent être utilisés pendant un combat ; leur
+effet est temporaire et l'objet est retiré de l'inventaire. Le joueur peut
+renouveler immédiatement l'étal d'un personnage contre 100 or ; le coût
+augmente de 50 or par réinitialisation quotidienne et revient à 100 or à minuit.
+Fichiers concernés :
+- src/equipements.csv
+- src/app/data/equipment.ts
+- src/app/data/troll.ts
+- src/app/services/troll-service.ts
+- src/app/components/market/market.ts
+- src/app/components/market/market.html
+- src/app/components/hero-detail-component/hero-detail-component.ts
+- src/app/components/hero-detail-component/hero-detail-component.html
+- src/app/components/arena/arena.ts
+- src/app/components/arena/arena.html
+- src/app/app.routes.ts
+- src/app/app.html
+- src/styles.css
+
+10. Tests et validation
+Description :
+Les tests des fonctionnalités de trolls, du tableau de bord, de l'inventaire et
+du marché sont regroupés dans un dossier dédié, séparé des fichiers de
+production. Les autres composants conservent leurs tests unitaires dédiés.
+Fichiers concernés :
+- src/app/tests/troll-service.spec.ts
+- src/app/tests/dashboard.spec.ts
+- src/app/tests/hero-detail.spec.ts
+- src/app/tests/market.spec.ts
+- src/app/tests/arena.spec.ts
+- src/app/services/message-service.ts
+- src/app/app.spec.ts
+- src/app/components/leaderboard/leaderboard.spec.ts
+- src/app/components/hero-edit-component/hero-edit-component.spec.ts
+- src/app/components/heroes-component/heroes-component.spec.ts
+
+FONCTIONNALITÉS NON INCLUSES DANS CETTE VERSION
+
+Les zones de combat, plusieurs classes et types d'ennemis, les tables de
+butin, le forgeron, le bestiaire et les maisons ne sont pas implémentés dans
+cette première version.

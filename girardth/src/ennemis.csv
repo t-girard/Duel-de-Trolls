@@ -1,0 +1,34 @@
+﻿nom,categorie,attaque_physique,attaque_magique,defense_physique,defense_magique,esquive,vie,or,xp,zone
+Gobelin chapardeur,gobelin,3,0,1,0,3,18,5,10,arena
+Frondeur gobelin des cavernes,gobelin,5,0,1,1,4,22,8,15,arena
+Chaman gobelin féticheur,gobelin,0,6,1,3,2,20,12,20,arena
+Chevaucheur de loup gobelin,gobelin,8,0,3,1,6,35,18,30,arena
+Paysan en colère avec une fourche,humain,4,0,1,0,1,25,4,12,arena
+Milicien du village,humain,6,0,4,1,1,35,12,22,arena
+Brigand de grand chemin,humain,8,0,3,1,4,38,25,28,arena
+Apprenti mage de la tour,humain,0,9,1,5,2,30,20,32,arena
+Chasseur de primes,humain,11,0,5,3,5,50,40,50,arena
+Chevalier de l'Ordre d'Argent,humain,14,0,10,4,0,75,55,75,arena
+Inquisiteur pyromancien,humain,0,16,3,9,2,55,60,80,arena
+Mineur nain pioche-fer,nain,7,0,5,2,0,45,22,30,montagne
+Arbalétrier nain des citadelles,nain,11,0,6,3,1,50,30,45,montagne
+Tueur de trolls à crête orange,nain,16,0,3,2,3,65,45,65,montagne
+Brise-fer en armure de mythril,nain,13,0,14,6,-2,90,70,90,montagne
+Maître des runes nain,nain,6,14,9,12,0,80,85,100,montagne
+Éclaireur elfe sylvain,elfe,8,0,2,3,6,32,18,35,foret
+Archer d'élite de la canopée,elfe,13,0,3,4,8,42,35,55,foret
+Danseur de guerre aux lames jumelles,elfe,15,0,2,4,10,48,45,70,foret
+Tisseur de sorts haut-elfe,elfe,0,18,2,10,5,45,65,85,foret
+Sanglier géant à défenses d'acier,bête,7,0,4,0,1,40,3,25,foret
+Araignée venimeuse des sous-bois,bête,9,3,2,2,5,35,5,35,foret
+Ours des cavernes enragé,bête,14,0,7,1,0,85,8,65,marais
+Basilic des marais putrides,bête,12,10,8,6,2,95,25,95,marais
+Squelette décrépit,mort-vivant,5,0,3,1,1,24,6,18,marais
+Goule affamée des cryptes,mort-vivant,10,0,3,2,4,45,15,40,marais
+Spectre hurleur,mort-vivant,0,13,8,4,7,40,30,60,marais
+Nécromancien déchu,mort-vivant,0,19,4,11,2,65,75,105,marais
+Guerrier orc balafré,orc,11,0,5,1,1,55,25,45,montagne
+Berserker orc sang-bouillant,orc,17,0,3,1,2,70,40,70,montagne
+Troll des cavernes renégat,troll,16,0,8,2,-1,110,50,95,montagne
+Chef de guerre Troll des montagnes,troll,22,0,12,5,0,150,120,160,montagne
+Dragon enragé,dragon,35,0,50,50,5,200,250,500,montagne

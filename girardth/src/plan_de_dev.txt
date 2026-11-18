@@ -1,0 +1,81 @@
+Le but est de faire un jeu où le joueur a un personnage (tout les personnages et ennemis sont des Trolls) avec des caractéristiques et il fait ce battre ce personnage pour le faire monter de niveau et progresser dans le jeu
+
+Pour le personnage :
+- Plusieurs classes qui ont chacunes leurs caractéristiques
+- un inventaire et des slots d'équipements et de consommables
+- des caractéristiques de combat
+- un niveau et un système d'xp (il faut de plus en plus d'xp pour monter de niveau au fur et à mesure que le personnage gagne des niveaux)
+- chaque fois que le personnage monte de niveau il peut améliorer ses caractéristiques (2 points à dépenser parmis les différentes stats)
+- certains échelons de niveaux donne plus de points de compétences (tout les 10 niveaux par exemple)
+- monter de niveaux permet de débloquer de nouveaux équimement à acheter au marché et qu'il pourra obtenir en tuant des ennemis
+- un portefeuille (la quantité d'or que possède le personnage)
+
+Pour les ennemis :
+- plusieurs types différents (des classes et/ou apparences différentes) avec chacune leurs caractéristiques
+- un niveau (agissant comme un multiplicateur pour les stats)
+- chaque ennemi a une table des récompenses. quand le personnage tue cet ennemi les récompenses qui lui sont attribuées dépendent à la fois du niveau du personnage, de la classe du personnage, du niveau et du type de l'ennemi
+  le niveau et la classe du personnage ainsi que le type de l'ennemi définissent la liste des équipements que peut obtenir le personnage
+  tandis que le niveau de l'ennemi détermine le niveau des équipements qu'il lâche (ce n'est pas une équation fixe ce sont des probabilités qui changent en fonction du niveau et une intervalle min-max)
+  le niveau maximum des équipements est égal au niveau du personnage actif
+
+Les combats :
+- possibilité de choisir entre plusieures zones qui définissent le niveau et le type des ennemis que le personnage peut potentiellement rencontrer
+le but est de vaincre des autres trolls dans l'arène pour débloquer de nouvelles zones.
+- tour par tour : le joueur à plusieurs options comme attaquer, défendre ou fuir
+l'action du personnage du joueur et celle de l'ennemi se font en même temps
+- le calcul des dégats est fait en fonction de la valeur d'attaque de l'attaquant (sa caractéristique d'attaque correspondant à l'arme qu'il tient + les dégats de l'arme)
+  et en fonction de la valeur de défense du défenseur (sa caractéristique de défense correspondant à l'arme de l'attaquant si il est en train de défendre + la somme des bonus de son armure)
+  auquel s'ajoute une probabilité d'esquive (qui dépend de la valeur d'esquive du défenseur et qui est limitée à maximum 50% de chance)
+  cette probabilité est calculée avant le calcul des dégats car si le défenseur esquive alors les dégats sont annulés et on a pas besoin de les calculer
+  il y a aussi un facteur multiplicateur aléatoire qui est compris entre 0,75 et 1,25 (appliqué après les calculs d'attaque et de défense)
+  et une probabilité de coup critique (qui est à 10% de chances par défaut et qui change le facteur multiplicateur pour qu'il soit égal à x2 pour cette attaque).
+- après chaque combat, si le personnage du joueur à gagné, le personnage gagne de l'or, de l'xp et des équipements.
+si le personnage du joueur perd le combat il gagne juste un peu d'xp mais perd une partie de l'or qu'il possède
+
+autres :
+- pour passer d'une page à l'autre il y a une navbar
+- les équipements ont une rareté et des stats qui changent en fonction de la rareté
+- quand le joueur crée un nouveau personnage il a 40 points de compétences à dépenser pour définir les caractéristiques de départ de son personnage
+- les caractéristiques d'un personnage sont : attaque physique, attaque magique, défense physique, défense magique, esquive, vie
+- quand le joueur survole une caractéristique de son personnage dans l'inventaire on affiche le détail de ce qui augmente cette caractéristique (points de compétences dans cette caractéristiques + les bonus apportés par les équipements au autre)
+- les caractéristiques d'un personnages ou d'un ennemi ne peuvent pas être inférieur à 1
+- la page du leaderboard doit afficher les 5 personnages du joueur qui ont le plus au niveau (on peut accéder au détail d'un personnage en cliquant dessus)
+- quetes quotidiennes, hebdomadaires et mensuelles qui rapportent des récompenses
+- les armes ont chacunes des attaques qui leurs sont propres
+- possibilité d'obtenir des objets servant à fabriquer des équipements et des potions
+- choix de l'avatar du personnage lorsqu'on le crée
+- changer le logo en haut à gauche de l'écran
+
+
+Les pages :
+- leaderboard
+- liste des persos créés par le joueur (il peut changer de personnage actif via cette liste en cliquant sur l'un des persos puis en cliquant sur "rendre actif"
+- une page spécifique pour gérer l'inventaire du personnage et voir ses stats (à la place de la page qui affichait les détails d'un héros initialement)
+- page de combat
+- bestiaire affichant la liste des ennemis rencontrés et leurs caractéristiques
+- un marché pour acheter des équipements et consommables
+- un forgeron qui peut améliorer les armes
+
+idée bonus :
+une page où le joueur peut construire une maison pour son personnage actif en dépensant de l'or de ce personnage. Chaque amélioration apportée à cette maison donne des bonus pour ce personnage
+cette maison à une taille en forme de grille et le joueur peut y ajouter des meubles qu'il peut acheter au marché.
+le joueur peut ajouter ou retirer des meubles (il y a un inventaire spécial accessible sur la page de la maison).
+Chaque meuble donne des bonus au personnage.
+chaque personnage a sa propre maison. chaque personnage débloque cette fonctionnalité à partir du niveau 5
+
+autre idée :
+- arbre de compétence pour les personnages
+
+encore une autre idée :
+- chaque personnage à une classe à sa création et à certains échelons de niveau il faut choisir une sous classe pour ce personnage
+
+pour la première version :
+- une classe (guerrier)
+- un type d'ennemi (soldat)
+- le système de combat (pas les zones juste le même combat en boucle)
+- l'écran de détail des héros doit devenir une page avec les stats du personnage actif du joueur et le joueur peut modifier les stats de son personnage
+tant qu'il a des points de compétences à dépenser
+- trois types d'armes (épée (attaque physique), arc (attaque physique), bâton (attaque magique)).
+le joueur peut sélectionner l'arme de son personnage actif sur la page des détails de son personnage
+- pas d'autres équipements pour l'instant
+- aucune autre fonctionnalité à part celles qui sont déjà présente et celles mentionnées ci-dessus

@@ -1,0 +1,96 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">ARMES ET ARMURES</p>
+    <h1>Le forgeron</h1>
+    <p class="muted">Une sélection quotidienne d’équipements, renouvelée chaque jour.</p>
+  </div>
+  @if (service.activeTroll(); as troll) {
+    <span class="pill gold-pill">◈ {{ troll.gold }} or</span>
+  }
+</section>
+
+@if (service.activeTroll(); as troll) {
+  <section class="market-panel panel">
+    <div class="market-toolbar">
+      <div>
+        <p class="eyebrow">CLIENT : {{ troll.name }} · NIVEAU {{ troll.level }}</p>
+        <h2>Étal du {{ service.marketDayLabel }}</h2>
+        <p class="muted">{{ service.dailyMarketEquipment().length }} article(s) disponible(s) aujourd’hui · capacité au prochain renouvellement : {{ service.marketStockCapacity(troll.id) }}</p>
+      </div>
+      <label class="market-filter">Catégorie
+        <select class="text-input" [value]="selectedCategory()" (change)="setCategory($event)">
+          <option value="tout">Tout</option>
+          <option value="arme">Armes</option>
+          <option value="armure">Armures</option>
+        </select>
+      </label>
+    </div>
+    @if (message()) { <p class="market-message" role="status">{{ message() }}</p> }
+    <div class="market-management">
+      <article class="market-upgrade">
+        <div>
+          <p class="eyebrow">AGRANDIR L’ÉTAL</p>
+          <h3>Élargir l’offre quotidienne</h3>
+          <p class="muted">Ajoute une arme ou une armure à l’étal de ce personnage à partir du prochain renouvellement. Le prix augmente à chaque amélioration.</p>
+        </div>
+        <div class="market-upgrade-action">
+          <span class="market-price">◈ {{ service.marketUpgradePrice(troll.id) }} or</span>
+          <button class="button button-secondary" type="button" [disabled]="troll.gold < service.marketUpgradePrice(troll.id)" (click)="upgradeMarket()">Améliorer le forgeron</button>
+        </div>
+      </article>
+      <article class="market-upgrade market-reroll">
+        <div>
+          <p class="eyebrow">RENOUVELER L’ÉTAL</p>
+          <h3>Nouvelle sélection</h3>
+          <p class="muted">Change immédiatement les articles proposés pour {{ troll.name }}. Le coût augmente de 50 or après chaque réinitialisation et revient à 100 or à minuit.</p>
+        </div>
+        <div class="market-upgrade-action">
+          <span class="market-price">◈ {{ service.marketRerollPrice(troll.id) }} or</span>
+          <button class="button button-secondary" type="button" [disabled]="troll.gold < service.marketRerollPrice(troll.id)" (click)="rerollMarket()">Réinitialiser le forgeron</button>
+        </div>
+      </article>
+    </div>
+    <div class="market-grid">
+      @for (item of items(); track item.id) {
+        <article class="market-item">
+          <div class="market-item-heading">
+            <div><p class="eyebrow">{{ item.category }} · {{ item.type }}</p><h3>{{ item.name }}</h3></div>
+            <span class="market-item-icon">{{ item.category === 'arme' ? '⚔' : '🛡' }}</span>
+          </div>
+          @if (item.category === 'arme') {
+            <p class="weapon-type-chip">{{ item.attackType === 'attackMagic' ? 'Attaque magique' : 'Attaque physique' }}</p>
+          }
+          <p class="market-description">{{ item.description }}</p>
+          <p class="market-bonuses">
+            @for (bonus of itemStatEntries(item); track bonus.stat) {
+              <span class="stat-value-chip">
+                <strong [class]="bonus.value > 0 ? 'bonus-positive' : 'bonus-negative'">{{ bonus.value > 0 ? '+' : '' }}{{ bonus.value }}</strong>
+                <span [class]="'stat-' + bonus.stat">{{ bonus.label }}</span>
+              </span>
+            }
+          </p>
+          <div class="market-item-footer">
+            <span class="market-price">◈ {{ item.price }} or</span>
+            <span class="market-level">Niveau {{ item.requiredLevel }}</span>
+            @if (isOwned(item)) {
+              <span class="market-owned">Possédé</span>
+            } @else {
+              <button class="button button-primary" type="button" [disabled]="!canBuy(item)" (click)="buy(item)">
+                @if (troll.level < item.requiredLevel) { Niveau insuffisant } @else if (troll.gold < item.price) { Trop cher } @else { Acheter }
+              </button>
+            }
+          </div>
+        </article>
+      } @empty {
+        <p class="muted">Aucun article ne correspond à cette catégorie.</p>
+      }
+    </div>
+    <p class="form-hint">La sélection change chaque jour selon le calendrier local. Les consommables achetés restent dans l’inventaire.</p>
+  </section>
+} @else {
+  <section class="panel empty-state">
+    <h2>Le forgeron attend son client</h2>
+    <p>Crée un troll ou rends-en un actif avant de faire des achats.</p>
+    <a class="button button-primary" routerLink="/profil">Voir mon profil</a>
+  </section>
+}

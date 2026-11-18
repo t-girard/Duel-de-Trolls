@@ -1,0 +1,64 @@
+<section class="page-heading profile-heading">
+  <div>
+    <p class="eyebrow">ESPACE DU JOUEUR</p>
+    <h1>Profil du joueur</h1>
+    <p class="muted">Gère tes trolls et choisis clairement ton combattant actif.</p>
+  </div>
+</section>
+
+@if (selectedMessage()) {
+  <p class="profile-success" role="status">{{ selectedMessage() }}</p>
+}
+
+<section class="profile-stats" aria-label="Statistiques du joueur">
+  <article class="profile-stat"><span>Trolls</span><strong>{{ trollService.trolls().length }}</strong></article>
+  <article class="profile-stat"><span>Or total</span><strong>◈ {{ totalGold() }}</strong></article>
+  <article class="profile-stat"><span>Niveau maximum</span><strong>{{ highestLevel() }}</strong></article>
+  <article class="profile-stat active-stat"><span>Troll actif</span><strong>{{ trollService.activeTroll()?.name ?? 'Aucun' }}</strong></article>
+</section>
+
+<section class="panel profile-roster">
+  <div class="section-heading">
+    <div><p class="eyebrow">TA TRIBU</p><h2>Mes trolls</h2></div>
+  </div>
+  @if (trollService.trolls().length) {
+    <div class="troll-list">
+      @for (troll of trollService.trolls(); track troll.id) {
+        <article class="troll-card" [class.is-active]="troll.active">
+          <div class="troll-avatar" aria-hidden="true">{{ troll.name.trim().charAt(0).toUpperCase() }}</div>
+          <div class="troll-summary">
+            <div class="troll-title">
+              <h3>{{ troll.name }}</h3>
+              @if (troll.active) { <span class="active-tag">ACTIF</span> }
+            </div>
+            <p>{{ troll.className }} · Niveau {{ troll.level }} · {{ troll.gold }} or</p>
+            <p class="weapon-line">Arme : {{ weaponLabel(troll.id) }}</p>
+          </div>
+          <div class="card-actions">
+            <button class="text-link detail-link" type="button" (click)="openDetails(troll.id)">Voir la fiche</button>
+            @if (troll.active) {
+              <button class="button button-primary" type="button" disabled>Troll actif</button>
+            } @else {
+              <button class="button button-secondary" type="button" (click)="setActive(troll.id, troll.name)">Rendre actif</button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <p class="muted">Aucun troll disponible.</p>
+  }
+  <div class="profile-create-action">
+    <a class="button button-primary full-width" routerLink="/nouveau-troll">+ Nouveau troll</a>
+  </div>
+</section>
+
+@if (detailTrollId(); as trollId) {
+  <div class="detail-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="detail-modal-title">
+    <button class="detail-modal-backdrop" type="button" aria-label="Fermer les détails du troll" (click)="closeDetails()"></button>
+    <div class="detail-modal-shell">
+      <button class="detail-modal-close" type="button" aria-label="Fermer" (click)="closeDetails()">×</button>
+      <app-troll-detail [trollId]="trollId" />
+    </div>
+  </div>
+}

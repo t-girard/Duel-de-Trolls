@@ -1,0 +1,64 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">LES CHAMPIONS DU JOUEUR</p>
+    <h1>Ta tribu de trolls</h1>
+    <p class="muted">Crée tes combattants et choisis celui qui entrera dans l’arène.</p>
+  </div>
+  <span class="pill">{{ trollService.trolls().length }} troll(s)</span>
+</section>
+
+  <div class="dashboard-grid">
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">TON ÉQUIPE</p><h2>Personnages</h2></div>
+      </div>
+      @if (trollService.trolls().length) {
+        <div class="troll-list">
+          @for (troll of trollService.trolls(); track troll.id) {
+            <article class="troll-card" [class.is-active]="troll.active">
+              <div class="troll-avatar" aria-hidden="true">{{ troll.name.trim().charAt(0).toUpperCase() }}</div>
+              <div class="troll-summary">
+                <div class="troll-title"><h3>{{ troll.name }}</h3>@if (troll.active) { <span class="active-tag">ACTIF</span> }</div>
+                <p>{{ troll.className }} · Niveau {{ troll.level }} · {{ troll.gold }} or</p>
+                <p class="weapon-line">Arme équipée : {{ weaponName(troll.id) }}</p>
+              </div>
+              <div class="card-actions">
+                <a class="text-link" [routerLink]="['/personnage', troll.id]">Détails</a>
+                @if (!troll.active) {
+                  <button class="button button-secondary" type="button" (click)="trollService.setActive(troll.id)">Rendre actif</button>
+                }
+                <button class="button button-quiet delete-troll-button" type="button" [attr.aria-label]="'Supprimer ' + troll.name" [title]="'Supprimer ' + troll.name" (click)="confirmDeletion(troll.id, troll.name)">🗑</button>
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="muted">Aucun personnage pour le moment. Crée ton premier troll.</p>
+      }
+      <div class="empty-note">Chaque guerrier commence avec 40 points de caractéristiques et se bat à mains nues.</div>
+    </section>
+
+    <section class="panel create-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">NOUVEAU COMBATTANT</p><h2>Créer un troll</h2></div>
+        <button class="button button-secondary random-button" type="button" (click)="randomizeStats()">Stats aléatoires</button>
+      </div>
+      <label class="field-label" for="troll-name">Nom du troll</label>
+      <input id="troll-name" class="text-input" type="text" maxlength="24" placeholder="Ex. Brak le massif" [value]="name()" (input)="name.set($any($event.target).value)">
+      <div class="points-heading"><span>Répartis les 40 points</span><span class="points-count" [class.points-complete]="pointsRemaining() === 0">{{ pointsRemaining() }} restants</span></div>
+      <div class="stat-editor">
+        @for (key of statKeys; track key) {
+          <label [class]="'stat-input-row ' + statClass(key)" [for]="'create-' + key">
+            <span>{{ statLabels[key] }}</span>
+            <span class="stat-stepper">
+              <button class="step-button" type="button" [attr.aria-label]="'Retirer un point de ' + statLabels[key]" [disabled]="draftStats()[key] <= 1" (click)="adjustStat(key, -1)">−</button>
+              <strong [id]="'create-' + key">{{ draftStats()[key] }}</strong>
+              <button class="step-button" type="button" [attr.aria-label]="'Ajouter un point à ' + statLabels[key]" [disabled]="pointsRemaining() <= 0" (click)="adjustStat(key, 1)">+</button>
+            </span>
+          </label>
+        }
+      </div>
+      <button class="button button-primary full-width" type="button" [disabled]="!name().trim() || pointsRemaining() !== 0" (click)="createTroll()">Forger mon troll</button>
+      @if (pointsRemaining() < 0) { <p class="form-hint error-text">La somme des caractéristiques doit être égale à 40.</p> }
+    </section>
+  </div>

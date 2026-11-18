@@ -1,0 +1,143 @@
+@if (displayedTroll(); as troll) {
+  <section class="page-heading">
+    <div>
+      <a class="button button-secondary roster-back-button" routerLink="/personnages">← Liste des personnages</a>
+      <p class="eyebrow">INVENTAIRE ET CARACTÉRISTIQUES</p>
+      <h1 id="detail-modal-title">{{ troll.name }}</h1>
+      <p class="muted">{{ troll.className }} · Niveau {{ troll.level }}</p>
+    </div>
+    <span class="pill gold-pill">◈ {{ troll.gold }} or</span>
+  </section>
+
+  <div class="sheet-grid">
+    <!-- Colonne gauche : état du personnage + caractéristiques (une seule liste) -->
+    <section class="panel stats-panel">
+      <div class="vitals">
+        <div class="large-avatar" aria-hidden="true">{{ troll.name.trim().charAt(0).toUpperCase() }}</div>
+        <div class="vitals-bars">
+          <div class="bar-label"><span>Points de vie</span><strong>{{ service.currentHealth(troll) }} / {{ statValue(troll, 'health') }} PV</strong></div>
+          <div class="progress-track"><span class="health-progress-bar" [style.width.%]="service.currentHealth(troll) / statValue(troll, 'health') * 100"></span></div>
+          <div class="bar-label"><span>Expérience</span><strong>{{ troll.xp }} / {{ 100 + (troll.level - 1) * 50 }} XP</strong></div>
+          <div class="progress-track"><span class="xp-bar" [style.width.%]="xpProgress(troll)"></span></div>
+        </div>
+      </div>
+      <p class="form-hint">Régénération : 1 PV toutes les 5 secondes hors combat.</p>
+
+      <div class="section-title">
+        <h2>Caractéristiques</h2>
+        <span class="points-count" [class.points-complete]="pointsAvailable(troll) === 0">{{ pointsAvailable(troll) }} point(s) à répartir</span>
+      </div>
+
+      <ul class="stat-rows">
+        @for (key of statKeys; track key) {
+          @let parts = statParts(troll, key);
+          <li [class]="'stat-row stat-summary-row ' + statClass(key)">
+            <div class="stat-row-main">
+              <span class="stat-name">{{ statLabels[key] }}</span>
+              <details class="stat-detail">
+                <summary>Détails du calcul</summary>
+                <span>{{ statBreakdown(troll, key) }}</span>
+              </details>
+              <div class="stat-row-bar" role="meter" [attr.aria-label]="statLabels[key]" [attr.aria-valuenow]="statBarPercent(troll, key)" aria-valuemin="0" aria-valuemax="100">
+                <span [style.width.%]="statBarPercent(troll, key)"></span>
+              </div>
+            </div>
+            <div class="stat-row-breakdown">
+              <span class="chip">Base {{ parts.base }}</span>
+              @if (parts.level) { <span class="chip">Niveau +{{ parts.level }}</span> }
+              @if (parts.gear) { <span class="chip" [class.chip-negative]="parts.gear < 0">Équipement {{ parts.gear > 0 ? '+' : '' }}{{ parts.gear }}</span> }
+            </div>
+            <strong class="stat-total">{{ parts.total }}</strong>
+            <div class="stat-controls">
+              <button class="step-button" type="button" [attr.aria-label]="'Retirer un point de ' + statLabels[key]" [disabled]="troll.stats[key] <= 1" (click)="changeStat(troll.id, key, -1)">−</button>
+              <button class="step-button" type="button" [attr.aria-label]="'Ajouter un point à ' + statLabels[key]" [disabled]="pointsAvailable(troll) <= 0" (click)="changeStat(troll.id, key, 1)">+</button>
+            </div>
+          </li>
+        }
+      </ul>
+      <p class="form-hint">Chaque niveau apporte +1 automatique aux caractéristiques (+5 PV pour la Vie) et 2 points à répartir. Un point en Vie vaut 5 PV.</p>
+    </section>
+
+    <!-- Colonne droite : emplacements d'équipement + actions -->
+    <aside class="panel equipment-panel">
+      <div class="section-title"><h2>Équipement</h2></div>
+      <div class="equipment-slots">
+        @for (slot of equipmentSlots; track slot.id) {
+          <article class="equipment-slot" [class.is-empty]="!equippedItem(troll, slot.id) && slot.id !== 'weapon'">
+            <span class="equipment-slot-label">{{ slot.label }}</span>
+            @if (equippedItem(troll, slot.id); as item) {
+              <strong>{{ item.name }}</strong>
+              @if (slot.id === 'weapon') { <small>{{ item.attackType === 'attackMagic' ? 'Attaque magique' : 'Attaque physique' }}</small> }
+              <span class="equipment-bonus-list">
+                @for (bonus of itemStatEntries(item); track bonus.stat) {
+                  <span class="stat-value-chip">
+                    <strong [class]="bonus.value > 0 ? 'bonus-positive' : 'bonus-negative'">{{ bonus.value > 0 ? '+' : '' }}{{ bonus.value }}</strong>
+                    <span [class]="'stat-' + bonus.stat">{{ bonus.label }}</span>
+                  </span>
+                }
+              </span>
+              <button class="text-link" type="button" (click)="unequipItem(troll.id, slot.id)">Retirer</button>
+            } @else if (slot.id === 'weapon') {
+              <strong>Poings</strong>
+              <small>+1 attaque physique</small>
+            } @else {
+              <span class="slot-empty">Vide</span>
+            }
+          </article>
+        }
+      </div>
+
+      <div class="panel-actions">
+        <a class="button button-primary" routerLink="/arene" (click)="enterArena(troll.id)">Entrer dans l’arène <span aria-hidden="true">→</span></a>
+        <div class="shop-links">
+          <a class="button button-secondary" routerLink="/forgeron">Forgeron</a>
+          <a class="button button-secondary" routerLink="/alchimiste">Alchimiste</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Sac : pleine largeur -->
+  <section class="panel character-inventory">
+    <div class="section-title">
+      <h2>Sac de {{ troll.name }}</h2>
+      <span class="pill">{{ troll.inventory.length }} objet(s)</span>
+    </div>
+    @if (ownedItems(troll).length) {
+      <div class="inventory-list">
+        @for (item of ownedItems(troll); track $index) {
+          <article class="inventory-item">
+            <div class="inventory-item-main">
+              <div class="inventory-item-title">
+                <strong>{{ item.name }}</strong>
+                <span class="chip">{{ item.category === 'potion' ? 'Consommable' : item.type }}</span>
+                @if (item.category === 'arme') {
+                  <span class="chip weapon-type-chip">{{ item.attackType === 'attackMagic' ? 'Attaque magique' : 'Attaque physique' }}</span>
+                }
+              </div>
+              <span class="equipment-bonus-list">
+                @for (bonus of itemStatEntries(item); track bonus.stat) {
+                  <span class="stat-value-chip">
+                    <strong [class]="bonus.value > 0 ? 'bonus-positive' : 'bonus-negative'">{{ bonus.value > 0 ? '+' : '' }}{{ bonus.value }}</strong>
+                    <span [class]="'stat-' + bonus.stat">{{ bonus.label }}</span>
+                  </span>
+                }
+              </span>
+            </div>
+            @if (isEquipped(troll, item)) {
+              <span class="market-owned">Équipé</span>
+            } @else {
+              <button class="button button-secondary" type="button" (click)="equipItem(troll.id, item.id)">
+                {{ item.category === 'potion' ? 'Placer dans un slot' : 'Équiper' }}
+              </button>
+            }
+          </article>
+        }
+      </div>
+    } @else {
+      <p class="muted inventory-empty">Ton sac est vide. Visite le forgeron ou l’alchimiste pour t’équiper.</p>
+    }
+  </section>
+} @else {
+  <section class="panel empty-state"><h1>Aucun troll actif</h1><p>Crée un troll ou sélectionne-en un dans ton profil pour consulter sa fiche.</p><a class="button button-primary" routerLink="/profil">Voir mon profil</a></section>
+}

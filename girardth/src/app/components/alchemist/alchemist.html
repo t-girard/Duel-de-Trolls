@@ -1,0 +1,58 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">POTIONS ET ÉLIXIRS</p>
+    <h1>L’alchimiste</h1>
+    <p class="muted">Des breuvages pour renforcer ton troll avant le combat.</p>
+  </div>
+  @if (service.activeTroll(); as troll) {
+    <span class="pill gold-pill">◈ {{ troll.gold }} or</span>
+  }
+</section>
+
+@if (service.activeTroll(); as troll) {
+  <section class="market-panel panel">
+    <div class="market-toolbar">
+      <div>
+        <p class="eyebrow">CLIENT : {{ troll.name }} · NIVEAU {{ troll.level }}</p>
+        <h2>Étagère de potions</h2>
+        <p class="muted">{{ items().length }} potion(s) disponible(s).</p>
+      </div>
+    </div>
+    @if (message()) { <p class="market-message" role="status">{{ message() }}</p> }
+    <div class="market-grid">
+      @for (item of items(); track item.id) {
+        <article class="market-item">
+          <div class="market-item-heading">
+            <div><p class="eyebrow">POTION · {{ item.type }}</p><h3>{{ item.name }}</h3></div>
+            <span class="market-item-icon" aria-hidden="true">⚗</span>
+          </div>
+          <p class="market-description">{{ item.description }}</p>
+          <p class="market-bonuses">
+            @for (bonus of itemStatEntries(item); track bonus.stat) {
+              <span class="stat-value-chip">
+                <strong [class]="bonus.value > 0 ? 'bonus-positive' : 'bonus-negative'">{{ bonus.value > 0 ? '+' : '' }}{{ bonus.value }}</strong>
+                <span [class]="'stat-' + bonus.stat">{{ bonus.label }}</span>
+              </span>
+            }
+          </p>
+          <div class="market-item-footer">
+            <span class="market-price">◈ {{ item.price }} or</span>
+            <span class="market-level">Niveau {{ item.requiredLevel }}</span>
+            <button class="button button-primary" type="button" [disabled]="!canBuy(item)" (click)="buy(item)">
+              @if (troll.level < item.requiredLevel) { Niveau insuffisant } @else if (troll.gold < item.price) { Trop cher } @else { Acheter }
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <p class="muted">Aucune potion n’est disponible pour ce personnage.</p>
+      }
+    </div>
+    <p class="form-hint">Les potions achetées sont ajoutées au sac du personnage.</p>
+  </section>
+} @else {
+  <section class="panel empty-state">
+    <h2>L’alchimiste attend son client</h2>
+    <p>Crée un troll ou rends-en un actif avant de faire des achats.</p>
+    <a class="button button-primary" routerLink="/profil">Voir mon profil</a>
+  </section>
+}

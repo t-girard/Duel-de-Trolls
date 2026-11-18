@@ -1,0 +1,55 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.button-31 {
+  background-color: #EDEDED;
+  border-radius: 4px;
+  border-style: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  color: #000000;
+  width: 35vw;
+  height: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 0;
+  margin: 10px;
+  outline: none;
+  overflow: hidden;
+  text-align: left;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.button-31:hover,
+.button-31:focus,
+.button-31:active,
+.button-31.selected{
+  background-color: #000000;
+  color: white;
+}
+
+.button-31>span {
+  height: stretch;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-31>span:first-child {
+  background-color: #3D3D61;
+  text-align: center;
+  color: white;
+  width: 40px;
+}
+
+.button-31>span:nth-child(2) {
+  margin: 10px;
+}

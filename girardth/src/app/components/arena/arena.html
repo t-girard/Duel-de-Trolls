@@ -1,0 +1,86 @@
+<section class="page-heading">
+  <div><p class="eyebrow">LE MOMENT DE PROUVER TA VALEUR</p><h1>L’arène</h1><p class="muted">Les combattants agissent dans le même tour. Attaque, défends-toi ou quitte le combat.</p></div>
+  <span class="pill">4 ZONES · ENNEMIS À NIVEAU VARIABLE</span>
+</section>
+
+@if (service.activeTroll(); as troll) {
+  @if (!fighter() || result()) {
+    <section class="panel arena-intro">
+      <div class="arena-mark">⚔</div>
+      <div><p class="eyebrow">COMBAT AU TOUR PAR TOUR</p><h2>{{ result() === 'victory' ? 'Une victoire de plus !' : result() === 'defeat' ? 'La défaite fait partie du chemin.' : result() === 'fled' ? 'Tu as quitté l’arène.' : 'Un adversaire attend ton troll.' }}</h2>
+        <p class="muted">@if (result() === 'victory') { {{ enemy()?.name }} est vaincu. } @else if (result() === 'defeat') { {{ enemy()?.name }} a remporté le combat. } @else if (result() === 'fled') { Le combat est terminé sans récompense. } @else { Ton combattant actif est {{ troll.name }}, niveau {{ troll.level }}. }</p>
+        <div class="zone-picker" role="group" aria-label="Choisir une zone de combat">
+          @for (zone of zones; track zone.id) {
+            <button type="button" class="button" [class.button-primary]="selectedZone() === zone.id" [class.button-secondary]="selectedZone() !== zone.id" [attr.aria-pressed]="selectedZone() === zone.id" (click)="selectedZone.set(zone.id)">
+              {{ zone.name }} · niv. {{ zone.minLevel }}–{{ zone.maxLevel }}
+            </button>
+          }
+        </div>
+        @if (arenaError()) { <p class="form-hint error-text" role="alert">{{ arenaError() }}</p> }
+        <button class="button button-primary" type="button" [disabled]="loadingEnemy()" (click)="startFight()">{{ loadingEnemy() ? 'Recherche d’un adversaire…' : result() ? 'Combattre à nouveau' : 'Explorer la zone' }}</button>
+      </div>
+    </section>
+    @if (result()) {
+      <section class="panel outcome-card" [class.outcome-victory]="result() === 'victory'" [class.outcome-defeat]="result() === 'defeat'">
+        <div class="outcome-illustration" aria-hidden="true">
+          @if (result() === 'victory') {
+            <svg viewBox="0 0 96 96" role="img"><path d="M27 18h42v14c0 17-9 29-21 29S27 49 27 32V18Z" fill="currentColor" opacity=".28"/><path d="M27 23H13v8c0 12 8 19 19 19m37-27h14v8c0 12-8 19-19 19M48 61v13m-16 5h32M37 74h22" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="m48 8 3 7 8 .6-6 5 2 8-7-4-7 4 2-8-6-5 8-.6 3-7Z" fill="currentColor"/></svg>
+          } @else if (result() === 'defeat') {
+            <svg viewBox="0 0 96 96" role="img"><path d="M48 10 78 21v22c0 21-13 34-30 43C31 77 18 64 18 43V21l30-11Z" fill="currentColor" opacity=".2"/><path d="M48 15 73 24v19c0 17-10 29-25 37-15-8-25-20-25-37V24l25-9Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="m37 37 22 22m0-22L37 59" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
+          } @else {
+            <svg viewBox="0 0 96 96" role="img"><path d="M48 10 78 21v22c0 21-13 34-30 43C31 77 18 64 18 43V21l30-11Z" fill="currentColor" opacity=".2"/><path d="M48 15 73 24v19c0 17-10 29-25 37-15-8-25-20-25-37V24l25-9Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M35 40h26m-22 12 9 9 9-9" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          }
+        </div>
+        <div class="outcome-content">
+          <p class="eyebrow">RÉSULTAT DU COMBAT</p>
+          <h2>{{ result() === 'victory' ? 'Victoire !' : result() === 'defeat' ? 'Défaite' : 'Combat interrompu' }}</h2>
+          @if (rewards(); as earned) {
+            <div class="reward-grid" aria-label="Bilan des récompenses">
+              <article class="reward-item reward-xp"><span class="reward-icon" aria-hidden="true">✦</span><span class="reward-label">Expérience</span><strong>{{ earned.xp >= 0 ? '+' : '' }}{{ earned.xp }} <small>XP</small></strong></article>
+              <article class="reward-item reward-gold"><span class="reward-icon" aria-hidden="true">◈</span><span class="reward-label">Or</span><strong>{{ earned.gold >= 0 ? '+' : '' }}{{ earned.gold }} <small>or</small></strong></article>
+            </div>
+          } @else {
+            <p class="muted">Aucune récompense n’a été remportée.</p>
+          }
+        </div>
+      </section>
+      <section class="panel battle-log result-log"><p class="eyebrow">JOURNAL DU COMBAT</p>
+        @for (event of log(); track $index) { <p class="log-entry" [class.latest-event]="$first">{{ event }}</p> }
+      </section>
+    }
+  } @else if (enemy(); as opponent) {
+    <section class="battlefield panel">
+      <div class="combatants">
+        <article class="combatant player-combatant">
+          <div class="combatant-avatar">{{ fighter()?.name?.trim()?.charAt(0)?.toUpperCase() ?? '?' }}</div><div class="combatant-info"><p class="eyebrow">TON GUERRIER · NIVEAU {{ fighter()?.level }}</p><h2>{{ fighter()?.name }}</h2><div class="health-label"><span>Vie</span><strong>{{ playerHp() }} / {{ playerMaxHealth() }}</strong></div>
+            <div class="health-track"><span class="health-fill player-health" [style.width.%]="healthPercent(playerHp(), playerMaxHealth())"></span></div>
+            <div class="combat-weapon">{{ equippedWeapon()?.name ?? 'Poings' }} · {{ equippedWeapon()?.attackType === 'attackMagic' ? 'Attaque magique' : 'Attaque physique' }} · bonus inclus dans les caractéristiques</div>
+          </div>
+        </article>
+        <div class="versus">VS</div>
+        <article class="combatant enemy-combatant">
+          <div class="combatant-avatar enemy-avatar">!</div><div class="combatant-info"><p class="eyebrow">{{ selectedZoneInfo().name }} · ENNEMI NIVEAU {{ opponent.level }} · {{ opponent.category }}</p><h2>{{ opponent.name }}</h2><div class="health-label"><span>Vie</span><strong>{{ enemyHp() }} / {{ opponent.maxHp }}</strong></div>
+            <div class="health-track"><span class="health-fill enemy-health" [style.width.%]="healthPercent(enemyHp(), opponent.maxHp)"></span></div>
+          <div class="combat-weapon">Attaque {{ opponent.attackMagic > opponent.attackPhysical ? 'magique' : 'physique' }} · Défense physique {{ opponent.defensePhysical }} · magique {{ opponent.defenseMagic }}</div>
+          </div>
+        </article>
+      </div>
+      <div class="battle-actions"><div><p class="eyebrow">CHOISIS TON ACTION</p><p class="muted">L’ennemi agit en même temps que toi.</p></div><div class="action-buttons">
+        <button class="button button-primary" type="button" (click)="takeTurn('attack')">⚔ Attaquer</button>
+        <button class="button button-secondary" type="button" (click)="takeTurn('defend')">🛡 Défendre</button>
+        <button class="button button-quiet" type="button" (click)="takeTurn('flee')">Fuir</button>
+        @if (equippedConsumable('consumable1'); as potion) {
+          <button class="button button-secondary" type="button" (click)="useConsumable('consumable1')" [title]="potion.description">🧪 {{ potion.name }}</button>
+        }
+        @if (equippedConsumable('consumable2'); as potion) {
+          <button class="button button-secondary" type="button" (click)="useConsumable('consumable2')" [title]="potion.description">🧪 {{ potion.name }}</button>
+        }
+      </div></div>
+    </section>
+    <section class="panel battle-log"><p class="eyebrow">JOURNAL DU COMBAT · {{ turn() }} TOUR(S)</p>
+      @for (event of log(); track $index) { <p class="log-entry" [class.latest-event]="$first">{{ event }}</p> }
+    </section>
+  }
+} @else {
+  <section class="panel empty-state"><h2>Choisis ton combattant</h2><p>Crée un troll et rends-le actif avant de lancer un combat.</p><a class="button button-primary" routerLink="/profil">Voir mon profil</a></section>
+}

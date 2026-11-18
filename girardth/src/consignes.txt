@@ -1,0 +1,62 @@
+Projet : duel de heros
+Version 2025-2026. Mise à jour à venir
+
+Les étapes 1 à 4 du tutoriel de “tour of heroes” servent de base à notre projet.
+
+Présentation
+L’éditeur de jeux « Bizzard » aimerait que vous réalisiez un éditeur de troll pour son futur jeu en ligne « duel de trolls ». Sur votre conseil, cet éditeur sera une application client riche réalisée à l’aide d’Angular.
+
+La version minimale de cette application sera composée de cinq fenêtres de travail :
+
+Un dashboard pour voir les héros les plus « marquants » :
+afficher les détails d’un héro si l’utilisateur le souhaite
+rediriger vers la fenêtre d’édition d’un héro ;
+Une fenêtre listant tous les héros présents, elle permet de :
+afficher les détails d’un héro si l’utilisateur le souhaite
+rediriger vers la fenêtre d’édition d’un héro ;
+créer un nouvel héro (redirection version la fenêtre d’édition) ;
+Une fenêtre listant toutes les armes disponibles, elle permet de :
+afficher les détails d’une arme si l’utilisateur le souhaite ;
+rediriger vers la fenêtre d’édition d’une arme ;
+créer une nouvelle arme (redirection version la fenêtre d’édition) ;
+Une fenêtre d’édition d’un héro avec répartition de ses points de compétence et association avec une arme ;
+Une fenêtre d’édition d’une arme avec répartition de ses points de compétence.
+Avez-vous bien ajouté votre projet au serveur GIT de l’IUT ?
+
+Améliorer les héros
+Objectif : comprendre le lien automatique entre le model et la vue.
+
+Améliorer les héros pour prendre en compte les demandes de la société :
+
+Un héro a 4 caractéristiques : attaque, esquive, dégâts, point de vie (pv). Une base de 40 points est à répartir entre ces caractéristiques. Exemple de répartition pour un héro nommé Bayard : 15pt en attaque, 5pt en esquive, 15pt en dégâts, 5pt en points de vie.
+
+ATTENTION CONTRAINTES concernant l’édition d’un héros :
+
+La somme de l’attaque, esquive, dégât et pv doit être inférieur ou égale à 40 ;
+Aucune caractéristique en dessous de 1pt ;
+Afficher les points restant à répartir pour aider l’utilisateur.
+Ajouter les armes
+Objectif : manipuler à nouveau les notions de service, route et classe.
+
+Ajouter la possibilité de créer des armes. Le concept est identique aux héros : une classe, un service associé, etc. Prenez exemple sur les héros pour réaliser l’édition des armes.
+
+Une arme a les mêmes caractéristiques qu’un héro : attaque, esquive, dégâts, point de vie (pv). Mais la répartition est différente !!! Exemple de répartition pour une arme nommé épée de la finesse : 0pt en attaque, -5pt en esquive, 5pt en dégâts, 0pt en points de vie.
+
+ATTENTION CONTRAINTES concernant l’édition d’une arme :
+
+La somme de l’attaque, esquive, dégât et pv doit être égale à 0 ;
+
+Une caractéristique est limitée entre -5pt et 5pt (inclus) ;
+
+Afficher les points restant à répartir pour aider l’utilisateur.
+
+Amélioration :
+
+Passage à une base de données distante (Firebase) ;
+
+Lier les armes aux héros
+Objectif : manipulation les objets.
+
+Un héro peut être équipé d’une arme (ou non). Prendre en compte ce lien et modifier l’éditeur en conséquence (par exemple afficher clairement les bonus/malus apportés aux héros).
+
+Un héro ne pourra pas ajouter une arme si le total d’une caractéristique passe en dessous de 1. Par exemple, le héro « Hervé B. » [att : 15, esq : 5, dég : 15, pv : 5] ne pourra pas ajouter l’arme « lunette de feu » [att : 5, esq :-5, dég : 0, pv : 0] car l’esquive serait de 0.

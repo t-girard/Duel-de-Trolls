@@ -1,0 +1,24 @@
+<header class="site-header">
+  <a class="brand" routerLink="/personnage"><span class="brand-mark">T</span><span><strong>{{ title }}</strong><small>La fosse aux combats</small></span></a>
+  <a class="profile-link" routerLink="/profil" routerLinkActive="active" aria-label="Voir le profil du joueur" title="Profil du joueur">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8c.7-4 3.1-6 7-6s6.3 2 7 6" /></svg>
+  </a>
+  @if (trollService.activeTroll(); as troll) {
+    <div class="nav-player" aria-label="Progression du personnage actif">
+      <span class="nav-player-level">Niv. {{ troll.level }}</span>
+      <span class="nav-player-name">{{ troll.name }}</span>
+      <span class="nav-xp-label">{{ troll.xp }} / {{ xpForNextLevel(troll.level) }} XP</span>
+      <span class="nav-xp-track"><span [style.width.%]="xpProgress(troll.level, troll.xp)"></span></span>
+    </div>
+  }
+  <nav class="nav" aria-label="Navigation principale">
+    <a routerLink="/personnage" routerLinkActive="active">Inventaire @if (skillPointsRemaining() > 0) { <span class="nav-badge">{{ skillPointsRemaining() }}</span> }</a>
+    <a routerLink="/forgeron" routerLinkActive="active">Forgeron</a>
+    <a routerLink="/alchimiste" routerLinkActive="active">Alchimiste</a>
+    <a routerLink="/arene" routerLinkActive="active">Arène</a>
+    <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+  </nav>
+</header>
+<main class="page-shell"><router-outlet></router-outlet></main>
+<footer class="site-footer">Forge ton troll. Choisis ton arme. Entre dans l’arène.</footer>
+<app-message-manager-component />

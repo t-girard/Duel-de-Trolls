@@ -1,0 +1,36 @@
+﻿nom,categorie,type,classe,type_attaque,attaque_physique,attaque_magique,defense_physique,defense_magique,esquive,vie,description
+Gourdasse en bois brut,arme,massue,guerrier,physique,3,0,0,0,0,0,Une grosse branche solide taillée grossièrement.
+Épée rouillée de maraudeur,arme,épée,guerrier,physique,5,0,0,0,0,0,Une vieille lame ramassée sur le champ de bataille.
+Hache de fendeur de crânes,arme,hache,guerrier,physique,8,0,0,0,-1,0,"Lourde et tranchante, frappe fort au détriment de l'agilité."
+Espadon en pierre taillée,arme,épée,guerrier,physique,12,0,1,0,-2,0,Un bloc de roche effilé réservé aux plus imposants des trolls.
+Fronde en cuir usé,arme,fronde,archer,physique,2,0,0,0,1,0,Idéale pour lancer des cailloux pointus en restant mobile.
+Arc court en frêne,arme,arc,archer,physique,5,0,0,0,1,0,Léger et maniable pour le tir rapide.
+Grand arc en os renforcé,arme,arc,archer,physique,8,0,0,0,2,0,Tendu par des tendons de bête sauvage pour percer le cuir.
+Arbalète lourde de siège,arme,arbalète,archer,physique,11,0,0,0,-1,0,Tir puissant mais mécanisme lourd à recharger.
+Bâton noueux de marais,arme,bâton,magicien,magique,0,3,0,0,0,0,Un bois imprégné de vapeurs fétides et magiques.
+Bâton d'os de chaman,arme,bâton,magicien,magique,0,6,0,0,0,0,Canalise les esprits des anciens shamans trolls.
+Totem rituel sculpté,arme,totem,magicien,magique,0,9,0,1,0,0,Grave des malédictions dans l'air ambiant.
+Bâton en obsidienne enchantée,arme,bâton,magicien,magique,0,13,0,0,0,0,Une pierre noire canalisant une pure énergie destructrice.
+Calotte de fer brut,armure,casque,guerrier,aucun,0,0,2,0,0,0,Protège le haut de la tête contre les cailloux.
+Casque à cornes de guerre,armure,casque,guerrier,aucun,0,0,4,0,0,5,"Épais et robuste, il renforce la résistance générale du troll."
+Plastron de cuir clouté,armure,plastron,guerrier,aucun,0,0,4,0,0,8,Cuir épais pour encaisser les coups sans trop faiblir.
+Plastron en plaques de fer,armure,plastron,guerrier,aucun,0,0,7,0,-2,15,Lourd blindage d'acier brut augmentant grandement la santé.
+Jambières de cuir durci,armure,jambières,guerrier,aucun,0,0,3,0,0,0,Bonne protection des cuisses et genoux.
+Bottes ferrées de fantassin,armure,bottes,guerrier,aucun,0,0,2,0,-1,0,Lourdes bottes assurant une bonne stabilité.
+Gantelets en fer forgé,armure,gants,guerrier,aucun,1,0,2,0,0,0,Protège les mains et durcit l'impact des coups.
+Bouclier en bois et métal,armure,bouclier,guerrier,aucun,0,0,5,1,-1,0,Grand pavois pour bloquer les frappes de face.
+Bandeau de traqueur,armure,casque,archer,aucun,0,0,1,0,2,0,Dégage les yeux pour ne jamais rater sa cible.
+Gilet en cuir souple,armure,plastron,archer,aucun,0,0,3,0,3,5,Protège le torse sans entraver la souplesse.
+Pantalon de chasseur,armure,jambières,archer,aucun,0,0,2,0,2,0,Tissu souple adapté aux courses rapides.
+Bottes légères d'éclaireur,armure,bottes,archer,aucun,0,0,1,0,3,0,Semelles fines conçues pour esquiver rapidement.
+Mitaines de précision,armure,gants,archer,aucun,1,0,0,0,2,0,Assure une prise en main stable pour la corde d'arc.
+Capuche d'initié mystique,armure,casque,magicien,aucun,0,0,1,2,0,0,Protège la tête des contrecoups arcaniques.
+Robe rituelle en tissu runique,armure,plastron,magicien,aucun,0,0,1,5,0,5,Étoffe bénie absorbant une partie des sorts ennemis.
+Jupe de chaman ornée de fétiches,armure,jambières,magicien,aucun,0,0,1,3,0,0,Les osselets tintent en dissipant les ondes magiques.
+Sandales élémentaires,armure,bottes,magicien,aucun,0,0,0,2,1,0,Légères et confortables pour esquiver les projectiles.
+Bracelets de canalisation,armure,gants,magicien,aucun,0,1,0,2,0,0,Canalisent l'énergie et dévient les étincelles magiques.
+Potion de force brute,potion,potion,guerrier,aucun,4,0,0,0,0,0,Décuple temporairement la force d'impact du guerrier.
+Potion d'agilité féline,potion,potion,archer,aucun,0,0,0,0,4,0,Accroît considérablement les réflexes et l'esquive.
+Élixir d'étincelle magique,potion,potion,magicien,aucun,0,4,0,0,0,0,Augmente temporairement la puissance des sorts du lanceur.
+Potion de carapace de pierre,potion,potion,toutes,aucun,0,0,4,0,-1,0,Durcit la peau du troll contre les armes physiques.
+Infusion de vigueur troll,potion,potion,toutes,aucun,0,0,0,0,0,15,Augmente temporairement les points de vie max du personnage.

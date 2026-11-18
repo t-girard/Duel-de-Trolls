@@ -1,0 +1,3 @@
+Il faut changer la manière d'afficher les détails d'un héros pour qu'on ne la confonde plus avec la page "inventaire". Il faut que lorsque l'on clique sur un bouton affichant les détails d'un héros on affiche une fenêtre superposée sur l'écran et que si on clique n'importe où ailleurs sur l'écran en dehors de la fenêtre alors la fenêtre de détail se ferme immédiatement et on reviens là où on en était avant de cliquer sur le bouton de détail. Cette fenêtre doit afficher les mêmes infos qu'avant mais de manière à respecter la taille réduite de la fenêtre par rapport à avant.
+
+Le bouton "nouveau troll" doit avoir la même largeur que les boites dans la liste des trolls du joueur
