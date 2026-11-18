@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /equipment/{equipmentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /enemies/{enemyId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /players/{playerId} {
+      allow read: if request.auth != null && request.auth.uid == playerId;
+      allow create, update: if request.auth != null
+        && request.auth.uid == playerId
+        && request.resource.data.keys().hasOnly(['trolls'])
+        && request.resource.data.trolls is list;
+      allow delete: if request.auth != null && request.auth.uid == playerId;
+    }
+  }
+}
